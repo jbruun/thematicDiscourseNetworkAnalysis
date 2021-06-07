@@ -5,21 +5,15 @@
 
 ##create bacbone versions of the graphs
 source("R_scripts/backboneExtraction.r")
-V(allNetEmpirical)$id<-V(allNetEmpirical)$name
 V(allNetTheoretical)$id<-V(allNetTheoretical)$name
 freq<-strength(allNetTheoretical,mode = "all")
 
 theoreticalBB<-backboneNetwork(allNetTheoretical,evalFunc = 1, alpha = 0.001)
 V(theoreticalBB)$freq<-strength(allNetTheoretical,mode = "all")
-empiricalBB<-backboneNetwork(allNetEmpirical,evalFunc = 1, alpha = 0.001)
-V(empiricalBB)$freq<-strength(allNetEmpirical,mode = "all")
 
 ####Create a map based on fast-greedy algorithm
 fgT<-fastgreedy.community(as.undirected(allNetTheoretical))
 fgTBB<-fastgreedy.community(as.undirected(theoreticalBB))
-optimal.community(theoreticalBB)
-fgE<-fastgreedy.community(as.undirected(allNetEmpirical))
-fgEBB<-fastgreedy.community(as.undirected(empiricalBB))
 
 V(theoreticalBB)$fastgreedy<-fgTBB$membership
 write.graph(theoreticalBB,"theoretical28052020.graphml",format="graphml")
@@ -28,7 +22,6 @@ V(empiricalBB)$fastgreedy<-fgEBB$membership
 write.graph(empiricalBB,"empirical28052020.graphml",format="graphml")
 
 ##MAP CREA
-source("EarlyChildhoodIBSE_IJRME/ScriptsAndCode/R-scripts/makemap.r")
 mapTheoretical<-makemap(fgTBB$membership,theoreticalBB)
 
 
@@ -48,13 +41,6 @@ fgMTremBB<-fastgreedy.community(as.undirected(mapTremBB))
 V(mapTremBB)$fastgreedy<-fgMTremBB$membership
 write.graph(mapTremBB,"mapTBBrem21062020.graphml",format="graphml")
 
-mapEmpiricalrem<-delete.vertices(mapEmpirical,13)
-mapEremBB<-backboneNetwork(mapEmpiricalrem,0.005,1)
-V(mapEremBB)$n_words<-V(mapEmpiricalrem)$n_words
-mapEremBB<-decompose.graph(mapEremBB)[[1]]
-fgMEremBB<-fastgreedy.community(as.undirected(mapEremBB))
-V(mapEremBB)$fastgreedy<-fgMEremBB$membership
-write.graph(mapEremBB,"mapEBB13rem21062020.graphml",format="graphml")
 
 
 

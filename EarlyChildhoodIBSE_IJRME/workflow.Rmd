@@ -1,7 +1,6 @@
 ---
 title: "'Workflow: Identification of positions in literature using Thematic Network Analysis"
-Analysis: The case of early childhood inquiry-based science education'
-author: "WIthheld until publication"
+author: "Withheld until publication"
 date: "6/4/2021"
 output: pdf_document
 ---
@@ -9,7 +8,7 @@ output: pdf_document
 ```{r setup, include=T}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+This document shows how to reproduce networks and maps found in xxx. 
 ```{r libraries and functions, include=T}
 library(tm)
 library(igraph)
@@ -20,7 +19,7 @@ source("functions/mywordnetwork.r")
 
 ###Pre-process###
 ```{r pre-process, include=T}
-allTheoretical <-Corpus(DirSource("textsTheoretical", encoding="UTF-8"), readerControl = list(language="lat")) 
+allTheoretical <-Corpus(DirSource("texts", encoding="UTF-8"), readerControl = list(language="lat")) 
 #Perform basic text-mining preprocessing
 allTheoretical<-tm_map(allTheoretical,tolower)
 allTheoretical<-tm_map(allTheoretical,removePunctuation)
@@ -39,6 +38,7 @@ wordstoremove<-c(stopwords("english"),"can","also","although","may","maybe","mor
 #allFilesx <- tm_map(allFilesx, removeWords, c("endoffile"))
 allTheoretical<-tm_map(allTheoretical,stripWhitespace)
 ```
+
 ###Make Nework###
 ```{r make network, include=T}
 edgelistsTheoretical<-lapply(allTheoretical,myWordNetwork,j.words=wordstoremove)
@@ -59,9 +59,9 @@ allNetTheoretical<-delete.vertices(allNetTheoretical,v = which(V(allNetTheoretic
 allNetTheoretical<-simplify(allNetTheoretical,remove.multiple=T,edge.attr.comb=list(weight="sum"))
 prT<-page.rank(allNetTheoretical)
 V(allNetTheoretical)$pr<-prT$vector
-sort(prT$vector,decreasing = T)[1:10]
 fgT<-fastgreedy.community(as.undirected(allNetTheoretical))
-write.csv(V(allNetTheoretical)$name,"listNodesTheoretical.csv")
+fileNameListOfNodes<-paste("listNodes",format(Sys.time(), "%d%b%Y"),"csv",sep="")
+write.csv(V(allNetTheoretical)$name,fileNameListOfNodes)
 ```
 
 ###Create Maps###
@@ -77,22 +77,19 @@ fgT<-fastgreedy.community(as.undirected(allNetTheoretical))
 fgTBB<-fastgreedy.community(as.undirected(theoreticalBB))
 
 V(theoreticalBB)$fastgreedy<-fgTBB$membership
-write.graph(theoreticalBB,"theoretical28052020.graphml",format="graphml")
+fileNameTheoreticalBB<-fileNameListOfNodes<-paste("theoretical",format(Sys.time(),"%d%b%Y"),".graphml",sep="")
+write.graph(theoreticalBB,fileNameTheoreticalBB,format="graphml")
 
-V(empiricalBB)$fastgreedy<-fgEBB$membership
-write.graph(empiricalBB,"empirical28052020.graphml",format="graphml")
-
-##MAP CREA
+##MAP CREATION
 mapTheoretical<-makemap(fgTBB$membership,theoreticalBB)
-
 
 mapTBB<-backboneNetwork(mapTheoretical,0.005,1)
 V(mapTBB)$n_words<-V(mapTheoretical)$n_words
 mapTBB<-decompose.graph(mapTBB)[[1]]
 fgMTBB<-fastgreedy.community(as.undirected(mapTBB))
 V(mapTBB)$fastgreedy<-fgMTBB$membership
-write.graph(mapTBB,"mapTBB21062020.graphml",format="graphml")
-
+fileNameMapBB<-paste("mapTBB",format(Sys.time(),"%d%b%Y"),".graphml",sep="")
+write.graph(theoreticalBB,fileNameMapBB,format="graphml")
 
 mapTheoreticalrem<-delete.vertices(mapTheoretical,1)
 mapTremBB<-backboneNetwork(mapTheoreticalrem,0.005,1)
@@ -100,10 +97,14 @@ V(mapTremBB)$n_words<-V(mapTheoreticalrem)$n_words
 mapTremBB<-decompose.graph(mapTremBB)[[1]]
 fgMTremBB<-fastgreedy.community(as.undirected(mapTremBB))
 V(mapTremBB)$fastgreedy<-fgMTremBB$membership
-write.graph(mapTremBB,"mapTBBrem21062020.graphml",format="graphml")
+fileNameMapTremBB<-paste("mapTremBB",format(Sys.time(),"%d%b%Y"),".graphml",sep="")
+write.graph(theoreticalBB,fileNameMapTremBB,format="graphml")
+
 ```
 ###Create theme networkss###
 ```{r create-theme-networks, include=T}
+
+
 ```
 ###Output files###
 ```{r output-files, include=T}

@@ -359,7 +359,7 @@ allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(
 allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(\\<reported\\>|\\<reporting\\>)", replacement="report")
 allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(\\<representing\\>|\\<representations\\>)", replacement="represent")
 allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(\\<representational\\>)", replacement="representation")
-allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(\\<requires\\>|\\<requiring\\>|\\<requirement\\>|\\<requisite\\>", replacement="require")
+allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(\\<requires\\>|\\<requiring\\>|\\<requirement\\>|\\<requisite\\>)", replacement="require")
 allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(\\<researchers\\>|\\<researcher\\>)", replacement="researcher") #HMMM
 allTheoretical <- tm_map(allTheoretical, content_transformer(gsub), pattern = "(\\<researching\\>)", replacement="research") #HMMM
 
