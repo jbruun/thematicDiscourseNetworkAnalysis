@@ -102,7 +102,7 @@ write.graph(theoreticalBB,fileNameMapTremBB,format="graphml")
 
 ```
 ###Create theme networkss###
-```{r create-theme-networks, include=T}
+```{r create-theme-networks, include=F}
 
 
 ```
