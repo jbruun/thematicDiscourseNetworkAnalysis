@@ -4,19 +4,19 @@ Wij<-function(j,mem,g){
   dfm<-data.frame()
   
   for(i in 1:length(m)){
-    x<-incident(g,m[i],mode="in")
-    a<-ends(g, x,names=F)
+    x<-incident(g,m[i],mode="in") # Get the links pointing at the i'th node in module
+    a<-ends(g, x,names=F) #Get the source for each link (the i'th node is target)
     
-    b<-get.edge.attribute(g,name="weight",x)
-    c<-mem[a[,1]] #HMMM:..
-    dfm<-rbind(dfm,data.frame(a,weight=b,module=c))
+    b<-get.edge.attribute(g,name="weight",x) #Get the weigths of the links in question
+    c<-mem[a[,1]] #Get module of node from which link comes. 
+    dfm<-rbind(dfm,data.frame(a,weight=b,module=c)) #add to data frame
     
   }
   
   
   V<-vector()
   for(l in 1:M){ 
-    V[l]<-sum(dfm$weight[dfm$module==l])
+    V[l]<-sum(dfm$weight[dfm$module==l],na.rm=T)
   }
   
   return(V)
